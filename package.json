@@ -1,0 +1,39 @@
+{
+  "name": "realm-backend",
+  "version": "1.0.0",
+  "description": "Backend integration for the Realm Sample to consume market data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vijaypolsani/realm-backend.git"
+  },
+  "keywords": [
+    "Realm",
+    "IEX",
+    "Market",
+    "Node"
+  ],
+  "author": "VJ",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vijaypolsani/realm-backend/issues"
+  },
+  "homepage": "https://github.com/vijaypolsani/realm-backend#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
+    "iex-api": "0.0.3",
+    "koa": "^2.7.0",
+    "lodash": "^4.17.11",
+    "node-cron": "^2.0.3",
+    "realm": "^2.24.0",
+    "socket.io-client": "^2.2.0"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  }
+}
