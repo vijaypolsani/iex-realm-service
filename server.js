@@ -19,6 +19,6 @@ realmListeners.addListeners()
 // schedule tasks to be run on the server
 cron.schedule('*/15 * * * *', function () {
   console.log('running a task every 15 minutes')
-  //iexClient.populateRealm()
+  iexClient.populateRealm()
 })
-//realTime.realTimeMarketData(constants.PORTFOLIO, realmIntegration.realmPortfolio)
+realTime.realTimeMarketData(constants.PORTFOLIO, realmIntegration.realmPortfolio)
