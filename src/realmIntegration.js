@@ -10,7 +10,7 @@ async function realmStockPortfolio (stockList) {
       realm.write(() => {
         let portfolio = realm.create('Portfolio', {
           projectId: 'IEX_Portfolio',
-          owner: user.identity,
+          owner: process.env.USERNAME,
           name: 'Portfolio',
           timestamp: new Date(),
           stocks: []
@@ -44,13 +44,13 @@ async function realmStock (stockMsg) {
   Realm.Sync.User.login(process.env.SERVER_URL,
     Realm.Sync.Credentials.usernamePassword(process.env.USERNAME, process.env.PASSWORD)).then((user) => {
     let config = user.createConfiguration()
-    config.path = constants.Stock.name
+    config.path = 'stocks'
     config.schema = [constants.Stock, constants.Portfolio]
     Realm.open(config).then((realm) => {
       realm.write(() => {
         let portfolio = realm.create('Portfolio', {
           projectId: 'IEX_Portfolio',
-          owner: user.identity,
+          owner: process.env.USERNAME,
           name: 'Portfolio',
           timestamp: new Date(),
           stocks: []
@@ -77,6 +77,7 @@ async function realmStock (stockMsg) {
           portfolio.stocks.push(newStock)
         }
       })
+      // realm.close() // I cannot close as this is steaming? How to handle connection pooling in Realm?
     })
   })
 }
@@ -90,7 +91,7 @@ async function realmNews (newsList) {
       realm.write(() => {
         let realTimeNews = realm.create('MarketNews', {
           projectId: 'IEX_News',
-          owner: user.identity,
+          owner: process.env.USERNAME,
           name: 'MarketNews',
           timestamp: new Date(),
           news: []
@@ -112,42 +113,13 @@ async function realmNews (newsList) {
           }
         }
       })
-      // realm.close()
+      realm.close()
+    }).catch((err) => {
+      console.error('Error in Realm saving data for News. ', err)
     })
-  })
-}
-
-async function realmPortfolioListener () {
-  Realm.Sync.User.login(process.env.SERVER_URL, Realm.Sync.Credentials.usernamePassword(process.env.USERNAME, process.env.PASSWORD)).then(user => {
-    if (Realm.isClosed) {
-      Realm.open({
-        schema: [constants.Stock],
-        sync: {
-          user: user,
-          url: process.env.SERVER_URL,
-          error: err => console.log(err)
-        }
-      }).then(realm => {
-        this.setState({ isReady: true, currentStock: realm.objects('RealTimeStock')[0], realm: realm })
-        // register the listener
-        realm.addListener('change', (realm) => {
-          this.setState(previousState => {
-            if (previousState.currentStock === undefined) {
-              return { isReady: true, currentStock: realm.objects('RealTimeStock') }
-            }
-            return previousState
-          })
-        })
-        realm.close()
-      })
-    }
-  }).catch(error => {
-    // an auth error has occurred
-    console.log('Auth error occured. ', error)
   })
 }
 
 module.exports.realmStockPortfolio = realmStockPortfolio
 module.exports.realmStock = realmStock
 module.exports.realmNews = realmNews
-module.exports.realmPortfolioListener = realmPortfolioListener

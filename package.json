@@ -29,11 +29,10 @@
     "koa": "^2.7.0",
     "lodash": "^4.17.11",
     "node-cron": "^2.0.3",
-    "realm": "^2.24.0",
+    "realm": "^2.25.0",
     "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0"
+    "nodemon": "^1.18.10"
   }
 }

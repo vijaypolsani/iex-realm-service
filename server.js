@@ -1,21 +1,25 @@
 // import { IEXClient } from 'iex-api'
+const cron = require('node-cron')
+const Koa = require('koa')
+require('dotenv').config()
+
+const realmListeners = require('./src/realmListeners')
 const realmIntegration = require('./src/realmIntegration')
 const realTime = require('./src/realTime')
 const iexClient = require('./src/iexClient')
-const cron = require('node-cron')
-require('dotenv').config()
 
-const Koa = require('koa')
 const app = new Koa()
+
 app.use(ctx => {
   ctx.body = 'Market Watch using Realm'
 })
 app.listen(3000)
 
+realmListeners.addListenersToStock()
+
 // schedule tasks to be run on the server
-cron.schedule('*/5 * * * *', function () {
-  console.log('running a task every minutes')
+cron.schedule('*/15 * * * *', function () {
+  console.log('running a task every 15 minutes')
   iexClient.populateRealm()
 })
-
 realTime.realTimeMarketData(process.env.PORTFOLIO, realmIntegration.realmStock)

@@ -24,7 +24,7 @@ async function realTimeMarketData (feed, callback, realm) {
   socket.on('disconnect', () => {
     if (socket.io.connecting.indexOf(socket) === -1) {
       setTimeout(socket.connect(), 5000) // Try reconnecting after 5 seconds
-      return console.log('Socket Disconnected & trying to reconnect!')
+      console.log('Socket Disconnected & trying to reconnect!')
     }
   })
 }
