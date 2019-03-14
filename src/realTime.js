@@ -5,20 +5,16 @@ var socket = require('socket.io-client')('https://ws-api.iextrading.com/1.0/tops
   reconnectionAttempts: Infinity
 })
 
-async function realTimeMarketData (feed, callback, realm) {
+async function realTimeMarketData (feed, callback) {
   console.log('subscribed feed: ', feed)
-  // Listen to the channel's messages
   socket.on('message', msg => {
-    // console.log(msg)
     callback(msg)
   })
-  // Connect to the channel
   socket.on('connect', () => {
     console.log('Connected to IEX server!')
-    // Subscribe to topics (i.e. appl,fb,aig+)
     socket.emit('subscribe', feed)
     // Unsubscribe from topics (i.e. aig+)
-    // socket.emit('unsubscribe', process.env.UNSUB_STOCKS)
+    // socket.emit('unsubscribe', constants.UNSUB_STOCKS)
   })
   // Disconnect from the channel
   socket.on('disconnect', () => {

@@ -1,5 +1,6 @@
 const axios = require('axios')
 const realmIntegration = require('./realmIntegration')
+const constants = require('../constants')
 
 const getMarketData = async (url) => {
   try {
@@ -15,13 +16,13 @@ const sleep = (milliseconds) => {
 }
 const populateRealm = async () => {
   console.log(`Got env: `, process.env.IEX_TOKEN)
-  // console.log(`Got TOPS_SAMPLE: `, process.env.TOPS_SAMPLE)
-  // console.log(`Got tops sample data: `, await getMarketData(process.env.TOPS_SAMPLE))
+  // console.log(`Got TOPS_SAMPLE: `, constants.TOPS_SAMPLE)
+  // console.log(`Got tops sample data: `, await getMarketData(constants.TOPS_SAMPLE))
   const portfolioSymbols = process.env.PORTFOLIO.split(',')
   for (let i = 0; i < portfolioSymbols.length; i++) {
     await sleep(1000)
     console.log('Calling api: ', (process.env.NEWS.replace('{symbol}', portfolioSymbols[i])))
-    realmIntegration.realmNews(await getMarketData(process.env.NEWS.replace('{symbol}', portfolioSymbols[i])))
+    realmIntegration.realmNews(await getMarketData(constants.NEWS.replace('{symbol}', portfolioSymbols[i])))
   }
 }
 

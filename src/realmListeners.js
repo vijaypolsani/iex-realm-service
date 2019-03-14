@@ -1,36 +1,37 @@
 const Realm = require('realm')
 const constants = require('../constants')
 
-const NOTIFIER_PATH = '^/([^/]+)/'
-const SERVER_URL = '//capitalmarkets.us1.cloud.realm.io'
-
-const handleChange = async function (changeEvent) {
-  const realm = changeEvent.realm
-  console.log('**** handleChange: path', changeEvent.path)
-  console.log('**** handleChange: realm objects', changeEvent.realm.objects('Stock'))
-  console.log('**** handleChange: oldRealm', changeEvent.realm)
-  console.log('**** handleChange: changes', changeEvent.changes)
-  const stockIndexes = changeEvent.changes.__ResultSets.modifications
-  console.log('**** changeEvent: stockIndexes ', stockIndexes)
+const handlePortfolioChange = async function (changeEvent) {
+  const stocks = changeEvent.realm.objects('Stock')
+  console.log('Portfolio change path: ', changeEvent.path)
+  const stockIndexes = changeEvent.changes.Stock.modifications
+  console.log('List of modification stockIndexes: ', stockIndexes)
+  for (let index of stockIndexes) {
+    console.log('Changed Stock: ', stocks[index])
+  }
 }
 
-const addListenersToStock = async function () {
+const handleNewsChange = async function (changeEvent) {
+  const news = changeEvent.realm.objects('News')
+  const newsIndexes = changeEvent.changes.News.modifications
+  console.log('News change path: ', changeEvent.path)
+  console.log('List of modification newsIndexes: ', newsIndexes)
+  for (let index of newsIndexes) {
+    console.log('Changed Stock: ', news[index])
+  }
+}
+
+const addListeners = async function () {
+  // Realm.Sync.setLogLevel('debug')
   const adminUser = await Realm.Sync.User
     .login(process.env.SERVER_URL, Realm.Sync.Credentials
       .usernamePassword(process.env.USERNAME, process.env.PASSWORD))
-  console.log('Got adminuser: ', adminUser.identity)
   try {
-    Realm.Sync.addListener(`realms:${SERVER_URL}`, adminUser, NOTIFIER_PATH, 'change', handleChange)
-    /**
-    let config = adminUser.createConfiguration()
-    config.path = 'Stock'
-    config.schema = [constants.Stock, constants.Portfolio]
-    const realm = await Realm.open(config)
-    console.log('realm: ', realm)
-    realm.addListener('change', (event) => console.log(event))
-    */
+    Realm.Sync.addListener(`realms://${process.env.SERVER_ADDRESS}`, adminUser, constants.PORTFOLIO_NOTIFIER_PATH, 'change', handlePortfolioChange)
+    Realm.Sync.addListener(`realms://${process.env.SERVER_ADDRESS}`, adminUser, constants.MARKETNEWS_NOTIFIER_PATH, 'change', handleNewsChange)
+    console.log('Added the listerners for changes!')
   } catch (e) {
-    console.error('********In catch for listener: ', e)
+    console.error('Error in registering listeners: ', e)
   }
 }
-module.exports.addListenersToStock = addListenersToStock
+module.exports.addListeners = addListeners
