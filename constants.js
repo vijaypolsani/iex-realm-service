@@ -1,5 +1,11 @@
 const PORTFOLIO = 'snap,fb,aig,googl,TNDM,ZS,BMY,STT,SQ,PYPL,AXP,ZUO,NTNX,GWRE,PLAN,VMW,PLAN,PANW,WDAY,SPLK,SIVB,DXCM,NTAP,ADSK,NVDA,CRM,INTU,COST,HD,TWLO,TJX,ROKU,LLY,JAZZ,CVS,MAR,BABA,BKNG,ANET,BIO,TEVA,AAPL,ZEN,KO,IBM,RHT,KLAC,GPN,FEYE,EA,MA,EBAY,TNET,MCO,MSTR,ADBE,AMZN,GOOGL,GRUB,LUV,BIDU,CMG,TENB,FTNT,QLYS,CYBR,ILMN,BIIB,TRV,ISRG,CELG,MSFT,VEEV,FB,OMN.AX'
 const UNSUBSCRIBE_PORTFOLIO = 'AIG+'
+const TOPS = 'https://cloud.iexapis.com/beta/tops?'
+const TOPS_LAST = 'https://cloud.iexapis.com/beta/tops/last?'
+const TOPS_SAMPLE = 'https://cloud.iexapis.com/beta/tops?symbols=GOOGL,FB,NOW%2b&'
+const STATS = 'https://cloud.iexapis.com/beta/stats?'
+const STATS_RECENT = 'https://cloud.iexapis.com/beta/stats/recent?'
+const NEWS = 'https://cloud.iexapis.com/beta/stock/{symbol}/news?'
 
 const S_P_500_1 = ''
 const S_P_500_2 = ''
@@ -11,6 +17,12 @@ const S_P_500_7 = ''
 const S_P_500_8 = ''
 const S_P_500_9 = ''
 const S_P_500_10 = ''
+
+const PORTFOLIO_NOTIFIER_PATH = '/portfolio'
+const STOCK_NOTIFIER_PATH = '/stock'
+const EQUITIES_NOTIFIER_PATH = '/equities'
+const MARKETNEWS_NOTIFIER_PATH = '/marketnews'
+const NEWS_NOTIFIER_PATH = '/news'
 
 const Stock = {
   name: 'Stock',
@@ -32,6 +44,17 @@ const Stock = {
     seq: 'int'
   }
 }
+const Equities = {
+  name: 'Equities',
+  primaryKey: 'projectId',
+  properties: {
+    projectId: 'string',
+    owner: 'string',
+    name: 'string',
+    timestamp: 'date',
+    stocks: 'Stock[]'
+  }
+}
 
 const Portfolio = {
   name: 'Portfolio',
@@ -45,8 +68,8 @@ const Portfolio = {
   }
 }
 
-const RealTimeNews = {
-  name: 'RealTimeNews',
+const News = {
+  name: 'News',
   primaryKey: 'url',
   properties: {
     datetime: 'date',
@@ -69,7 +92,7 @@ const MarketNews = {
     owner: 'string',
     name: 'string',
     timestamp: 'date',
-    news: 'RealTimeNews[]'
+    news: 'News[]'
   }
 }
 
@@ -79,8 +102,20 @@ module.exports = {
   serverUrl: 'https://capitalmarkets.us1.cloud.realm.io',
   Stock: Stock,
   Portfolio: Portfolio,
-  RealTimeNews: RealTimeNews,
+  Equities: Equities,
+  News: News,
   MarketNews: MarketNews,
   PORTFOLIO: PORTFOLIO,
-  UNSUBSCRIBE_PORTFOLIO: UNSUBSCRIBE_PORTFOLIO
+  UNSUBSCRIBE_PORTFOLIO: UNSUBSCRIBE_PORTFOLIO,
+  TOPS: TOPS,
+  TOPS_LAST: TOPS_LAST,
+  TOPS_SAMPLE: TOPS_SAMPLE,
+  STATS: STATS,
+  STATS_RECENT: STATS_RECENT,
+  NEWS: NEWS,
+  PORTFOLIO_NOTIFIER_PATH: PORTFOLIO_NOTIFIER_PATH,
+  STOCK_NOTIFIER_PATH: STOCK_NOTIFIER_PATH,
+  EQUITIES_NOTIFIER_PATH: EQUITIES_NOTIFIER_PATH,
+  MARKETNEWS_NOTIFIER_PATH: NEWS_NOTIFIER_PATH,
+  NEWS_NOTIFIER_PATH: NEWS_NOTIFIER_PATH
 }

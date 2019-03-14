@@ -3,11 +3,8 @@
 
 1. Integrates from IEX to Realm DB cloud solution
 2. Cron iteration to get latest news
-3. Listener - Documentation needs a better explanantion with pics for permissions on classes, realms etc
+3. Completed adding Listeners for News & Stock changes - (Documentation could be better  with explanantion ob API & diagrams) (Api for for pics for permissions on classes, realms etc needed)
 
-#### NOTES
-1. Always use default admin in POC
-2. Create the realms '/realm-name'
-3. When I used the user/password and creating the data, the realms are getting created inside /default Listener could not get realm.objects(). paths are uuid based
-4. If you created by hand, upgrade the realms to reference from full.
 
+Realm listener realm.objects('Stock') not able to return any objects. The path does not show the Schema in cloud server. Any help?
+![alt text](./CatchingListeners.png)

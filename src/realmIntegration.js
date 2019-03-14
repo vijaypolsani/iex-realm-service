@@ -1,17 +1,22 @@
 const Realm = require('realm')
 const constants = require('../constants')
 
-async function realmStockPortfolio (stockList) {
+async function realmEquities (stockList) {
   Realm.Sync.User.login(process.env.SERVER_URL, Realm.Sync.Credentials.usernamePassword(process.env.USERNAME, process.env.PASSWORD)).then((user) => {
-    let config = user.createConfiguration()
-    config.path = 'portfolio'
-    config.schema = [constants.Stock, constants.Portfolio]
+    const config = {
+      schema: [constants.Stock, constants.Equities],
+      path: 'equities',
+      sync: {
+        user: user,
+        url: `realms://${process.env.SERVER_ADDRESS}/equities`
+      }
+    }
     Realm.open(config).then((realm) => {
       realm.write(() => {
-        let portfolio = realm.create('Portfolio', {
-          projectId: 'IEX_Portfolio',
+        let equities = realm.create('Equities', {
+          projectId: 'IEX_Equities',
           owner: process.env.USERNAME,
-          name: 'Portfolio',
+          name: 'Equities',
           timestamp: new Date(),
           stocks: []
         }, true)
@@ -32,7 +37,7 @@ async function realmStockPortfolio (stockList) {
             marketPercent: stockList[i].marketPercent,
             seq: stockList[i].seq
           }, true)
-          portfolio.stocks.push(newStock)
+          equities.stocks.push(newStock)
         }
       })
       realm.close()
@@ -40,12 +45,17 @@ async function realmStockPortfolio (stockList) {
   })
 }
 
-async function realmStock (stockMsg) {
+async function realmPortfolio (stockMsg) {
   Realm.Sync.User.login(process.env.SERVER_URL,
     Realm.Sync.Credentials.usernamePassword(process.env.USERNAME, process.env.PASSWORD)).then((user) => {
-    let config = user.createConfiguration()
-    config.path = 'stocks'
-    config.schema = [constants.Stock, constants.Portfolio]
+    const config = {
+      schema: [constants.Stock, constants.Portfolio],
+      path: 'portfolio',
+      sync: {
+        user: user,
+        url: `realms://${process.env.SERVER_ADDRESS}/portfolio`
+      }
+    }
     Realm.open(config).then((realm) => {
       realm.write(() => {
         let portfolio = realm.create('Portfolio', {
@@ -84,12 +94,17 @@ async function realmStock (stockMsg) {
 
 async function realmNews (newsList) {
   Realm.Sync.User.login(process.env.SERVER_URL, Realm.Sync.Credentials.usernamePassword(process.env.USERNAME, process.env.PASSWORD)).then((user) => {
-    let config = user.createConfiguration()
-    config.path = 'news'
-    config.schema = [constants.RealTimeNews, constants.MarketNews]
+    const config = {
+      schema: [constants.News, constants.MarketNews],
+      path: 'marketnews',
+      sync: {
+        user: user,
+        url: `realms://${process.env.SERVER_ADDRESS}/marketnews`
+      }
+    }
     Realm.open(config).then((realm) => {
       realm.write(() => {
-        let realTimeNews = realm.create('MarketNews', {
+        let marketNews = realm.create('MarketNews', {
           projectId: 'IEX_News',
           owner: process.env.USERNAME,
           name: 'MarketNews',
@@ -98,7 +113,7 @@ async function realmNews (newsList) {
         }, true)
         if (newsList) {
           for (let i = 0; i < newsList.length; i++) {
-            let newArticle = realm.create('RealTimeNews', {
+            let newArticle = realm.create('News', {
               related: newsList[i].related,
               headline: newsList[i].headline,
               datetime: new Date(newsList[i].datetime),
@@ -109,7 +124,7 @@ async function realmNews (newsList) {
               lang: newsList[i].lang,
               hasPaywall: newsList[i].hasPaywall
             }, true)
-            realTimeNews.news.push(newArticle)
+            marketNews.news.push(newArticle)
           }
         }
       })
@@ -120,6 +135,6 @@ async function realmNews (newsList) {
   })
 }
 
-module.exports.realmStockPortfolio = realmStockPortfolio
-module.exports.realmStock = realmStock
+module.exports.realmEquities = realmEquities
+module.exports.realmPortfolio = realmPortfolio
 module.exports.realmNews = realmNews
