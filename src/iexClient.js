@@ -1,13 +1,12 @@
 const axios = require('axios')
 const realmIntegration = require('./realmIntegration')
-const _ = require('lodash')
 
 const getMarketData = async (url) => {
   try {
     const responseData = await axios.get(`${url}token=${process.env.IEX_TOKEN}`)
     return responseData.data
   } catch (error) {
-    console.error(error)
+    console.error('Error in the rest call to IEX: Status ', error.response.status, ' Response Message: ', error.response.data)
   }
 }
 
@@ -21,6 +20,7 @@ const populateRealm = async () => {
   const portfolioSymbols = process.env.PORTFOLIO.split(',')
   for (let i = 0; i < portfolioSymbols.length; i++) {
     await sleep(1000)
+    console.log('Calling api: ', (process.env.NEWS.replace('{symbol}', portfolioSymbols[i])))
     realmIntegration.realmNews(await getMarketData(process.env.NEWS.replace('{symbol}', portfolioSymbols[i])))
   }
 }

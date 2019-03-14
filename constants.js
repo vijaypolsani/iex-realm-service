@@ -1,3 +1,17 @@
+const PORTFOLIO = 'snap,fb,aig,googl,TNDM,ZS,BMY,STT,SQ,PYPL,AXP,ZUO,NTNX,GWRE,PLAN,VMW,PLAN,PANW,WDAY,SPLK,SIVB,DXCM,NTAP,ADSK,NVDA,CRM,INTU,COST,HD,TWLO,TJX,ROKU,LLY,JAZZ,CVS,MAR,BABA,BKNG,ANET,BIO,TEVA,AAPL,ZEN,KO,IBM,RHT,KLAC,GPN,FEYE,EA,MA,EBAY,TNET,MCO,MSTR,ADBE,AMZN,GOOGL,GRUB,LUV,BIDU,CMG,TENB,FTNT,QLYS,CYBR,ILMN,BIIB,TRV,ISRG,CELG,MSFT,VEEV,FB,OMN.AX'
+const UNSUBSCRIBE_PORTFOLIO = 'AIG+'
+
+const S_P_500_1 = ''
+const S_P_500_2 = ''
+const S_P_500_3 = ''
+const S_P_500_4 = ''
+const S_P_500_5 = ''
+const S_P_500_6 = ''
+const S_P_500_7 = ''
+const S_P_500_8 = ''
+const S_P_500_9 = ''
+const S_P_500_10 = ''
+
 const Stock = {
   name: 'Stock',
   primaryKey: 'symbol',
@@ -66,5 +80,7 @@ module.exports = {
   Stock: Stock,
   Portfolio: Portfolio,
   RealTimeNews: RealTimeNews,
-  MarketNews: MarketNews
+  MarketNews: MarketNews,
+  PORTFOLIO: PORTFOLIO,
+  UNSUBSCRIBE_PORTFOLIO: UNSUBSCRIBE_PORTFOLIO
 }
