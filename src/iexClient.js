@@ -11,20 +11,15 @@ const getMarketData = async (url) => {
   }
 }
 
-const sleep = (milliseconds) => {
-  return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
-const populateRealm = async () => {
+const populateRealmWithTickerInfo = async (project) => {
   console.log(`Got env: `, process.env.IEX_TOKEN)
-  // console.log(`Got TOPS_SAMPLE: `, constants.TOPS_SAMPLE)
-  // console.log(`Got tops sample data: `, await getMarketData(constants.TOPS_SAMPLE))
-  const portfolioSymbols = constants.PORTFOLIO.split(',')
-  for (let i = 0; i < portfolioSymbols.length; i++) {
-    await sleep(1000)
-    console.log('Calling api: ', (constants.NEWS.replace('{symbol}', portfolioSymbols[i])))
-    realmIntegration.realmNews(await getMarketData(constants.NEWS.replace('{symbol}', portfolioSymbols[i])))
+  if (project.name) {
+    const data = await getMarketData(constants.NEWS.replace('{symbol}', project.name))
+    console.log('Input param from IEX:', project)
+    console.log('Data from IEX:', data)
+    realmIntegration.realmProjectItem(data, project)
   }
 }
 
 module.exports.getMarketData = getMarketData
-module.exports.populateRealm = populateRealm
+module.exports.populateRealmWithTickerInfo = populateRealmWithTickerInfo

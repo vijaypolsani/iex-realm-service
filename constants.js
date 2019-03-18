@@ -1,4 +1,4 @@
-const PORTFOLIO = 'snap,fb,aig,googl,TNDM,ZS,BMY,STT,SQ,PYPL,AXP,ZUO,NTNX,GWRE,PLAN,VMW,PLAN,PANW,WDAY,SPLK,SIVB,DXCM,NTAP,ADSK,NVDA,CRM,INTU,COST,HD,TWLO,TJX,ROKU,LLY,JAZZ,CVS,MAR,BABA,BKNG,ANET,BIO,TEVA,AAPL,ZEN,KO,IBM,RHT,KLAC,GPN,FEYE,EA,MA,EBAY,TNET,MCO,MSTR,ADBE,AMZN,GOOGL,GRUB,LUV,BIDU,CMG,TENB,FTNT,QLYS,CYBR,ILMN,BIIB,TRV,ISRG,CELG,MSFT,VEEV,FB,OMN.AX'
+const PORTFOLIO = 'CYBR,ILMN,BIIB'
 const UNSUBSCRIBE_PORTFOLIO = 'AIG+'
 const TOPS = 'https://cloud.iexapis.com/beta/tops?'
 const TOPS_LAST = 'https://cloud.iexapis.com/beta/tops/last?'
@@ -7,22 +7,11 @@ const STATS = 'https://cloud.iexapis.com/beta/stats?'
 const STATS_RECENT = 'https://cloud.iexapis.com/beta/stats/recent?'
 const NEWS = 'https://cloud.iexapis.com/beta/stock/{symbol}/news?'
 
-const S_P_500_1 = ''
-const S_P_500_2 = ''
-const S_P_500_3 = ''
-const S_P_500_4 = ''
-const S_P_500_5 = ''
-const S_P_500_6 = ''
-const S_P_500_7 = ''
-const S_P_500_8 = ''
-const S_P_500_9 = ''
-const S_P_500_10 = ''
-
 const PORTFOLIO_NOTIFIER_PATH = '/portfolio'
 const STOCK_NOTIFIER_PATH = '/stock'
 const EQUITIES_NOTIFIER_PATH = '/equities'
-const MARKETNEWS_NOTIFIER_PATH = '/marketnews'
-const NEWS_NOTIFIER_PATH = '/news'
+const MARKETNEWS_NOTIFIER_PATH = '/MarketNews'
+const NEWS_NOTIFIER_PATH = '/News'
 
 const Stock = {
   name: 'Stock',
@@ -70,29 +59,42 @@ const Portfolio = {
 
 const News = {
   name: 'News',
-  primaryKey: 'url',
+  primaryKey: 'uuid',
   properties: {
-    datetime: 'date',
-    headline: 'string',
-    source: 'string',
-    url: 'string',
-    summary: 'string',
-    related: 'string',
-    image: 'string',
-    lang: 'string',
-    hasPaywall: 'bool'
+    uuid: 'string',
+    url: 'string?',
+    datetime: 'date?',
+    headline: 'string?',
+    source: 'string?',
+    summary: 'string?',
+    related: 'string?',
+    image: 'string?',
+    lang: 'string?',
+    hasPaywall: 'bool?',
+    published: 'bool?'
   }
 }
 
-const MarketNews = {
-  name: 'MarketNews',
+const Project = {
+  name: 'Project',
   primaryKey: 'projectId',
   properties: {
     projectId: 'string',
     owner: 'string',
     name: 'string',
     timestamp: 'date',
-    news: 'News[]'
+    items: 'Item[]'
+  }
+}
+
+const Item = {
+  name: 'Item',
+  primaryKey: 'itemId',
+  properties: {
+    itemId: 'string',
+    body: 'string',
+    isDone: 'bool',
+    timestamp: 'date'
   }
 }
 
@@ -104,7 +106,8 @@ module.exports = {
   Portfolio: Portfolio,
   Equities: Equities,
   News: News,
-  MarketNews: MarketNews,
+  Project: Project,
+  Item: Item,
   PORTFOLIO: PORTFOLIO,
   UNSUBSCRIBE_PORTFOLIO: UNSUBSCRIBE_PORTFOLIO,
   TOPS: TOPS,
@@ -116,6 +119,6 @@ module.exports = {
   PORTFOLIO_NOTIFIER_PATH: PORTFOLIO_NOTIFIER_PATH,
   STOCK_NOTIFIER_PATH: STOCK_NOTIFIER_PATH,
   EQUITIES_NOTIFIER_PATH: EQUITIES_NOTIFIER_PATH,
-  MARKETNEWS_NOTIFIER_PATH: NEWS_NOTIFIER_PATH,
+  MARKETNEWS_NOTIFIER_PATH: MARKETNEWS_NOTIFIER_PATH,
   NEWS_NOTIFIER_PATH: NEWS_NOTIFIER_PATH
 }
